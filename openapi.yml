@@ -1,0 +1,234 @@
+openapi: '3.0.2'
+info:
+  title: Ministry Minder REST API
+  version: '1.0'
+servers:
+  - url: http://ocp4.de:8080/api/
+  - url: http://localhost:8080/api/
+paths:
+  /channels:
+    delete:
+      tags:
+        - users
+      summary: Delete a channel
+      description: Delete a channel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the channel to delete
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '204':
+          description: Deleted
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+    put:
+      tags:
+        - users
+      summary: Update a channel
+      description: Update a channel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Channel'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+    post:
+      tags:
+        - users
+      summary: Create a channel
+      description: Create a channel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Channel'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+    get:
+      tags:
+        - users
+      summary: Get all channels
+      description: Get all channels
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Channel'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+    
+  /audios:    
+    post:
+      tags:
+        - users
+      summary: Create an audio
+      description: Create an audio
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AudioRequest'
+      responses:
+        '202':
+          description: Accepted
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'        
+    get:
+      tags:
+        - users
+      summary: Get all audios
+      description: Get all audios
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Audio'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+  /transcriptions:
+    get:
+      tags:
+        - users
+      summary: Get all transcriptions
+      description: Get all transcriptions
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Transcription'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  schemas:
+    Channel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 500
+        description:
+          type: string
+          maxLength: 5000
+        audios:
+          type: array
+          items:
+            $ref: '#/components/schemas/Audio'
+      required:
+        - name        
+    Audio:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 500
+        url:
+          $ref: '#/components/schemas/Url'
+        filepath:
+          $ref: '#/components/schemas/Filepath'
+        transcriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Transcription'
+    AudioRequest:
+      type: object
+      properties:
+        url:
+          $ref: '#/components/schemas/Url'        
+    Transcription:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid                
+        text:
+          type: string
+          maxLength: 1000000
+    Url:
+      type: string
+      maxLength: 10000
+    Filepath:
+      type: string
+      maxLength: 10000
+    ErrorDetail:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+        developerMessage:
+          type: string
+          maxLength: 10000
+        userMessage:
+          type: string
+          maxLength: 10000
+        details:
+          type: string
+          maxLength: 10000
+  responses:    
+    ClientError:
+      description: Client Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetail'
+    ServerError:
+      description: Server Error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorDetail'  
