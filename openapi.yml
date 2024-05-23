@@ -198,6 +198,21 @@ components:
         text:
           type: string
           maxLength: 1000000
+    AnalyzedTranscriptionRepsonse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        transcriptionUuid:
+          type: string
+          format: uuid
+        request:
+          type: string
+          maxLength: 1000000        
+        responst:
+          type: string
+          maxLength: 1000000        
     Url:
       type: string
       maxLength: 10000
