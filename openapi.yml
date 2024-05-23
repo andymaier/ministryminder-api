@@ -198,7 +198,7 @@ components:
         text:
           type: string
           maxLength: 1000000
-    AnalyzedTranscriptionRepsonse:
+    AnalyzedTranscriptionResponse:
       type: object
       properties:
         id:
@@ -210,7 +210,7 @@ components:
         request:
           type: string
           maxLength: 1000000        
-        responst:
+        response:
           type: string
           maxLength: 1000000        
     Url:
