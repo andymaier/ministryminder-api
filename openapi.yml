@@ -1,59 +1,26 @@
 openapi: '3.0.2'
 info:
   title: Ministry Minder REST API
+  description: Ministry Minder REST API
   version: '1.0'
+  contact:
+    name: Andreas Maier
+    email: info@systems62.com
 servers:
-  - url: http://ocp4.de:8080/api/
-  - url: http://localhost:8080/api/
+  - url: http://ocp4.de:8080/api
+  - url: http://localhost:8080/api
+  - url: https://srmn.net/api
+tags:
+  - name: users
+    description: User operations
 paths:
-  /channels:
-    delete:
-      tags:
-        - users
-      summary: Delete a channel
-      description: Delete a channel
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: ID of the channel to delete
-          schema:
-            type: integer
-            format: int64
-      responses:
-        '204':
-          description: Deleted
-        '4XX':
-          $ref: '#/components/responses/ClientError'
-        '5XX':
-          $ref: '#/components/responses/ServerError'
-    put:
-      tags:
-        - users
-      summary: Update a channel
-      description: Update a channel
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Channel'
-      responses:
-        '200':
-          description: Updated
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Channel'
-        '4XX':
-          $ref: '#/components/responses/ClientError'
-        '5XX':
-          $ref: '#/components/responses/ServerError'
+  /channels:    
     post:
       tags:
         - users
       summary: Create a channel
       description: Create a channel
+      operationId: createChannel
       requestBody:
         required: true
         content:
@@ -76,6 +43,7 @@ paths:
         - users
       summary: Get all channels
       description: Get all channels
+      operationId: getChannels
       responses:
         '200':
           description: ok
@@ -89,13 +57,66 @@ paths:
           $ref: '#/components/responses/ClientError'
         '5XX':
           $ref: '#/components/responses/ServerError'
-    
+  /channels/{id}:
+    delete:
+      tags:
+        - users
+      summary: Delete a channel
+      description: Delete a channel
+      operationId: deleteChannel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the channel to delete
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Deleted
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+    put:
+      tags:
+        - users
+      summary: Update a channel
+      description: Update a channel
+      operationId: updateChannel
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the channel to delete
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Channel'
+      responses:
+        '200':
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Channel'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
   /audios:    
     post:
       tags:
         - users
       summary: Create an audio
       description: Create an audio
+      operationId: createAudio
       requestBody:
         required: true
         content:
@@ -114,6 +135,7 @@ paths:
         - users
       summary: Get all audios
       description: Get all audios
+      operationId: getAudios
       responses:
         '200':
           description: ok
@@ -133,6 +155,7 @@ paths:
         - users
       summary: Get all transcriptions
       description: Get all transcriptions
+      operationId: getTranscriptions
       responses:
         '200':
           description: ok
@@ -142,6 +165,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Transcription'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
+  /transcriptions/{id}:
+    get:      
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the transcription to get
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - users
+      summary: Get all transcriptions
+      description: Get all transcriptions
+      operationId: getTranscription
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:                
+                $ref: '#/components/schemas/Transcription'
         '4XX':
           $ref: '#/components/responses/ClientError'
         '5XX':
