@@ -149,6 +149,32 @@ paths:
           $ref: '#/components/responses/ClientError'
         '5XX':
           $ref: '#/components/responses/ServerError'
+  /audios/{id}:
+    get:      
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: ID of the audio to get
+          schema:
+            type: string
+            format: uuid
+      tags:
+        - users
+      summary: Get all audios
+      description: Get all audios
+      operationId: getAudio
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:                
+                $ref: '#/components/schemas/Audio'
+        '4XX':
+          $ref: '#/components/responses/ClientError'
+        '5XX':
+          $ref: '#/components/responses/ServerError'
   /transcriptions:
     get:
       tags:
