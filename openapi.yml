@@ -261,7 +261,7 @@ components:
             $ref: '#/components/schemas/Transcription'
         ytVideoId:
           type: string
-          maxLength: 10000
+          maxLength: 10000        
     AudioRequest:
       type: object
       properties:
@@ -273,6 +273,9 @@ components:
         id:
           type: string
           format: uuid                
+        audioId:
+          type: string
+          format: uuid
         text:
           type: string
           maxLength: 1000000
