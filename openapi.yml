@@ -10,6 +10,7 @@ servers:
   - url: http://ocp4.de:8080/api
   - url: http://localhost:8080/api
   - url: https://srmn.net/api
+  - url: https://predigt.io/api
 tags:
   - name: users
     description: User operations
